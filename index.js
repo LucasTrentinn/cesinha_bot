@@ -3,7 +3,7 @@
 // Declarations
 const Discord = require('discord.js')
 require("dotenv").config()
-const generateImage = require('./generateImage.js')
+// const generateImage = require('./generateImage.js')
 
 // Bot variables and creation
 const client = new Discord.Client({
@@ -14,27 +14,41 @@ const client = new Discord.Client({
     ]
 })
 
+let bot = {
+    client,
+    prefix: "n.",
+    owners:["191383093712519179"]
+}
 
-// Functions
-client.on("ready", () => {
-    console.log(`Olá, eu sou o ${client.user.tag}. Como posso ajudar?`)
-})
+client.commands = new Discord.Collection()
+client.events = new Discord.Collection()
 
-client.on("messageCreate", (message) => {
-    if(message.content == "hi") {
-        message.reply("Hello World!")
-    }
-})
+client.loadEvents = (bot, reload) => require('./handlers/events')(bot, reload)
 
-const canalBemVindoID = "958152142219247688"
+client.loadEvents(bot, false)
 
-client.on("guildMemberAdd", async (member) => {
-    const img = await generateImage(member)
-    member.guild.channels.cache.get(canalBemVindoID).send({
-        content: `<@${member.id}>, seja bem vindo!`,
-        files: [img]
-    })
-})
+module.exports = bot
+
+// // Functions
+// client.on("ready", () => {
+//     console.log(`Olá, eu sou o ${client.user.tag}. Como posso ajudar?`)
+// })
+
+// client.on("messageCreate", (message) => {
+//     if(message.content == "hi") {
+//         message.reply("Hello World!")
+//     }
+// })
+
+// const canalBemVindoID = "958152142219247688"
+
+// client.on("guildMemberAdd", async (member) => {
+//     const img = await generateImage(member)
+//     member.guild.channels.cache.get(canalBemVindoID).send({
+//         content: `<@${member.id}>, seja bem vindo!`,
+//         files: [img]
+//     })
+// })
 
 
 // Managing the token
